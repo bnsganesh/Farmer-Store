@@ -1,0 +1,151 @@
+{% extends 'controls/main.html' %}
+{% load static %}
+
+{% block content %}
+
+	<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+<head>
+	<title>Store</title>
+	
+	<!-- CSS only -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+	
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</head>
+<style>
+	.user_display{
+		font-size: 18px;
+		color: #fff;
+	}
+</style>
+<body>
+
+	<nav class="navbar navbar-dark bg-dark">
+		<a href="{% url 'index' %}" class="navbar-brand">
+			<img id="cart-icon" src="{% static 'images/store.png' %}"/>
+		</a>
+		<span class="user_display">
+			<svg class="bi bi-person-circle" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			  <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+			  <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+			  <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+			</svg>
+			{{request.user}}
+		</span>
+		<div class="form-inline my-2 my-lg-0">
+			<a href="#" onclick="javascript: openFullscreen();">
+				<img id="cart-icon" src="{% static 'images/fs_open.png' %}">
+			</a>
+			<a href="#" onclick="javascript: closeFullscreen();">
+				<img id="cart-icon" src="{% static 'images/fs_close.png' %}">
+			</a>
+			<a href="{% url 'signout' %}">
+				<img id="cart-icon" src="{% static 'images/sign-out.png' %}">
+			</a>
+		</div>
+	</nav>
+		
+	<div class="container"> 	
+		<br>
+		
+		<div class="row">
+
+		<div class="col-lg-12">
+			<div class="box-element">
+			<form><a class="btn" href="{% url 'home' %}">&#x2190;</a>
+				<center>
+				<div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 40%">
+					<center><i class="fa fa-calendar"></i>&nbsp;
+					<span></span> <i class="fa fa-caret-down"></i>
+				</div></br></br>
+			</form>
+				<table class="table">
+					<tr>
+						
+						<th><h5>Export <strong>Report</strong></h5></th>
+						<th>
+							<svg class="bi bi-arrow-down-circle" width="3em" height="3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+							  <path fill-rule="evenodd" d="M4.646 7.646a.5.5 0 0 1 .708 0L8 10.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+							  <path fill-rule="evenodd" d="M8 4.5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5z"/>
+							</svg>
+						</th>
+						
+						<th>
+							<img src="{% static 'images/report/email.png' %}" height=50 width=50>
+						</th>
+						
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div class="box-element">
+				<div class="cart-row">
+					<div style="flex:1"><strong>Custemor</strong></div>
+					<div style="flex:1"><strong>Order</strong></div>
+					<div style="flex:1"><strong>Transaction Id</strong></div>
+					<div style="flex:1"><strong>Date</strong></div>
+					<div style="flex:1"><strong>Items</strong></div>
+					<div style="flex:1"><strong>Amount</strong></div>
+				</div>
+				{% for order in orders %}
+				<div class="cart-row">
+					{% if order.transaction_id is not Null%}
+					<div style="flex:1"><p>{{order.custemor.name}}</p></div>
+					<div style="flex:1"><p>{{order}}</p></div>
+					<div style="flex:1"><p>{{order.transaction_id}}</p></div>
+					<div style="flex:1"><p>{{order.date_ordered|date:"SHORT_DATE_FORMAT"}}</p></div>
+					<div style="flex:1"><p>{{order.get_cart_items}}</p></div>
+					<div style="flex:1"><p>Rs. {{order.get_cart_total}}</p></div>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	</div>
+	
+	<script type="text/javascript">
+		$(function() {
+
+			var start = moment().subtract(29, 'days');
+			var end = moment();
+
+			function cb(start, end) {
+				$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+			}
+
+			$('#reportrange').daterangepicker({
+				startDate: start,
+				endDate: end,
+				ranges: {
+				   'Today': [moment(), moment()],
+				   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+				   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+				   'This Month': [moment().startOf('month'), moment().endOf('month')],
+				   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+				}
+			}, cb);
+
+			cb(start, end);
+
+		});
+	</script>
+	
+</body>
+
+</html>
+	
+{% endblock content %}
