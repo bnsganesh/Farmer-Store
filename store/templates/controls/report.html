@@ -1,0 +1,110 @@
+{% extends 'controls/main.html' %}
+{% load static %}
+	<style>
+		img[disabled]
+		{
+			opacity:0.5;
+		}
+	</style>
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="box-element">
+				<a  class="btn" href="{% url 'home' %}">&#x2190;</a>
+					<form id="report-form" method="POST" action="">
+						{% csrf_token %}
+						<center>
+							{{myFilter.form.start_date}}
+							&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;
+							{{myFilter.form.end_date}}
+						</center>
+					</form>
+				<br>
+				
+				<table class="table">
+					<tr>
+						
+						
+						<th><h5>Export <strong>Report</strong></h5></th>
+						<th>
+						<a href="{% url 'download_report' %}" style="color:black;" onClick="return confirm('Download Report ?')">
+							<svg class="bi bi-arrow-down-circle" width="3em" height="3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+								<path fill-rule="evenodd" d="M4.646 7.646a.5.5 0 0 1 .708 0L8 10.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+								<path fill-rule="evenodd" d="M8 4.5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5z"/>
+							</svg>
+						</a>
+						</th>
+						<th>
+							<div id="mail">
+								<img src="{% static 'images/report/email.png' %}" height=50 width=50 onClick="sendMail()"/>
+							</div>
+						</th>
+						
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div class="box-element">
+				<div class="cart-row">
+					<div style="flex:1"><strong>&nbsp;&nbsp;&nbsp;Date</strong></div>
+					<div style="flex:1"><strong>&nbsp;&nbsp;Transaction Id</strong></div>
+					<div style="flex:1"><strong>Custemor</strong></div>
+					<div style="flex:1"><strong>Items</strong></div>
+					<div style="flex:1"><strong>Amount</strong></div>
+				</div>
+				{% for order in orders %}
+				<div class="cart-row">
+					{% if order.transaction_id is not Null%}
+					<div style="flex:1"><p>{{order.date_ordered|date:"SHORT_DATE_FORMAT"}}</p></div>
+					<div style="flex:1"><p>{{order.transaction_id}}</p></div>
+					<div style="flex:1"><p>{{order.custemor.name}}</p></div>
+					<div style="flex:1"><p>&nbsp;&nbsp;&nbsp;{{order.get_cart_items}}</p></div>
+					<div style="flex:1"><p>Rs. {{order.get_cart_total}}</p></div>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$( function() {
+		   $('#start_date').change(function(){
+			  $('#report-form').submit();
+		   });
+		});
+		$( function() {
+		   $('#end_date').change(function(){
+			  $('#report-form').submit();
+		   });
+		});
+		
+		
+		function sendMail(){
+		console.log('Sending Mail...')
+		document.getElementById('mail').innerHTML='<img src="{% static 'images/report/sending_mail.gif' %}" height=50 width=50"/>'
+		
+		var url = '/email_report/'
+		
+		fetch(url, {
+				method:'POST',
+				headers:{
+					'Content-Type':'application/json',
+					'X-CSRFToken':'{{ csrf_token }}',
+				},
+				body:JSON.stringify()
+			})
+			.then((response) =>{
+				return response.json();
+			})
+			.then((data) =>{
+				document.getElementById('mail').innerHTML='<img src="{% static 'images/report/email.png' %}" height=50 width=50 onClick="sendMail()"/>'
+				alert("Mail Sent!");
+			})
+			
+		}	
+	</script>
+{% endblock content %}

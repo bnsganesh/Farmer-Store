@@ -1,0 +1,41 @@
+{% extends 'controls/main.html' %}
+{% load static %}
+
+{% block content %}
+<center>
+	</br></br>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<a href="{% url 'report' %}">
+					<img src="{% static 'images/home/report.png' %}" height=100 width=100>
+				</a>
+			</div>
+			<div class="col">
+				<a href="#">
+					<img src="{% static 'images/home/coin.png' %}" height=100 width=100>
+				</a>
+			</div>
+		</div>
+		
+	</br></br></br></br></br></br>
+		<div class="row">
+			<div class="col">
+				<a href="{% url 'add_item' %}">
+					<img src="{% static 'images/home/add_item.png' %}" height=100 width=100>
+				</a>
+			</div>
+			<div class="col">
+				<a href="#">
+					<img src="{% static 'images/home/refill.png' %}" height=100 width=100>
+				</a>
+			</div>
+			<div class="col">
+				<a href="#">
+					<img src="{% static 'images/home/tray.png' %}" height=100 width=100>
+				</a	>
+			</div>
+		</div>
+	</div>
+</center>
+{% endblock content %}
