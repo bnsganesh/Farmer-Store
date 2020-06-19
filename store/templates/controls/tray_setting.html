@@ -1,0 +1,168 @@
+{% extends 'controls/main.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+	input::placeholder {  
+        text-align: center; 
+    }
+	.inputStyle{
+		border-top-style: hidden;
+		border-right-style: hidden;
+		border-left-style: hidden;
+		border-bottom-style: groove;
+	}
+</style>
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-rows: 50px 50px 50px;
+  grid-gap: 10px;
+  background-color: #f6f6f6;
+  padding: 10px;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.grid-container > div {
+  background-color: #add8e6;
+  text-align: center;
+  padding: 3px 0;
+  font-size: 12px;
+  border-radius: 8px;
+}
+</style>
+<center>
+<div class="row">
+		<div class="col-sm">
+			<div class="box-element">
+			<div class="grid-container">
+			{% for x in range %}
+				<div data-slot="{{x}}" class="tray">
+				
+					{% for product in products %}
+						{% if x == product.slot %}
+							<img src="{{product.imageURL}}" id="{{product.slot}}" data-name="{{product.name}}" data-stock="{{product.stock}}" data-url="{{product.imageURL}}" height=40 width=40 style="border-radius: 8px;"/>
+						{% endif %}
+					
+					{% endfor %}
+				</div>
+			{% endfor %}
+			</div>
+			
+		</div>
+	
+	</div>
+
+</div>
+</br>
+
+<div class="row">
+	
+	<div class="col-sm">
+		
+		<div class="box-element">
+			<center><strong>Products</strong></center>
+			
+			<div class="cart-row">
+			
+			</div>
+			<div class="cart-row">
+				<div style="flex:1"><strong>Slot</strong></div>
+				<div style="flex:1"><strong>Product</strong></div>
+			</div>
+			
+			{% for product in products %}
+			<div class="cart-row">
+				<div style="flex:1">{{product.slot}}</div>
+				<div style="flex:1">{{product.name}}</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	
+	<div class="col-sm">
+		
+		<div class="box-element">
+			<center><strong>Tray</strong></center>
+			
+			<div class="cart-row">
+			
+			</div>
+			<form action="" method="POST" id="form">
+			{% csrf_token %}
+				<center>
+					#<input type="number" id="slot" name="slot" class="inputStyle" placeholder="Tray" required/></br></br>
+					<input type="text" id="name" name="name" class="inputStyle" placeholder="Product" required/></br></br>
+					<input type="number" id="stock" name="stock" class="inputStyle" placeholder="Capacity" required/></br></br>
+					<img id = "preview" src = "#" alt = "" style="border-radius: 8px;" height=100 width=100/>
+				</center>
+				
+				<div class="cart-row">
+				</div>
+				
+				<center>
+					<button type="button" id="clear" style="border-radius: 25px;" class="btn btn-outline-danger" onClick="clearTray()">&#10007;</button>
+					<button type="submit" id="update" style="border-radius: 25px;" class="btn btn-outline-success">&#10003;</button>
+					<div id="error">
+						{% for message in messages %}
+							<center>{{message}}</center>
+						{% endfor %}
+					</div>
+				</center>
+			</form>
+		</div>
+		
+	</div>
+</div>
+</center>	
+	<script>
+
+	var updateBtns = document.getElementsByClassName('tray')
+	for (i=0; i< updateBtns.length; i++){
+			updateBtns[i].addEventListener('click', function(){
+			document.getElementById("slot").readOnly = true;
+			
+			
+			var slot = parseInt(this.dataset.slot)
+			document.getElementById("slot").value = slot;
+			console.log('Slot:',slot)
+			
+			var product = document.getElementById(slot)
+			if(typeof(product)!='undefined' && product != null){
+				document.getElementById("stock").value = parseInt(product.dataset.stock);
+				document.getElementById("name").value = product.dataset.name;
+				$('#preview').attr('src', product.dataset.url);
+			}
+			else{
+				document.getElementById("stock").value = null;
+				document.getElementById("name").value = '';
+				$('#preview').attr('src', '');
+			}
+		})
+	}
+	
+	function clearTray(){
+		var url = "/tray_delete/"
+		console.log('Slot:',parseInt(form.slot.value))
+			fetch(url, {
+				method:'POST',
+				headers:{
+					'Content-Type':'application/json',
+					'X-CSRFToken':'{{ csrf_token }}',
+				},
+				body:JSON.stringify({'slot': parseInt(form.slot.value)}),
+			})
+			.then((response) => response.json())
+			.then((data) =>{
+				console.log('Cleared:',data);
+				alert('Tray Cleared');	
+				window.location.href = "{% url 'tray_setting' %}"
+			})
+		
+	}
+	
+	
+	</script>
+{% endblock content %}

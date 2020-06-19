@@ -1,0 +1,105 @@
+{% extends 'controls/main.html' %}
+{% load static %}
+{% block content %}
+<style>
+	input::placeholder {  
+        text-align: center; 
+    }
+	.inputStyle{
+		border-top-style: hidden;
+		border-right-style: hidden;
+		border-left-style: hidden;
+		border-bottom-style: groove;
+	}
+</style>
+
+<center>
+	<div class="row">
+		
+		<div class="col-sm">
+			<div class="box-element">
+				
+				<center>
+					<strong>Coin Dispenser</strong>
+				</center>
+					
+				<div class="cart-row">
+					
+				</div>
+				<form id="form" method="POST" action="" enctype="multipart/form-data">	
+				{% csrf_token %}
+					<div class="cart-row">
+						<div style="flex:1">Coin Value</div>
+						<div style="flex:1"><input type="number" name="value" id="value" class="inputStyle" required /></div>
+					</div>
+					<div class="cart-row">
+						<div style="flex:1">Total</div>
+						<div style="flex:1"><strong>Rs. {{total}}/-</strong></div>
+					</div>
+					<div class="cart-row">
+						<div style="flex:1">Current Count</div>
+						<div style="flex:1">{{count}}</div>
+					</div>
+					<div class="cart-row">
+						<div style="flex:1"><strong>New Count</strong></div>
+						<div style="flex:1"><input type="number" name="count" id="count" class="inputStyle" required /></div>
+					</div>
+					<center>
+						<button type="button" style="border-radius: 25px;" class="btn btn-outline-danger" onClick="removeCoin()">&#10007;</button>
+						<button type="submit" style="border-radius: 25px;" class="btn btn-success">&#10011;</button>
+					</center>
+				</form>
+			</div>
+		</div>
+		
+		<div class="col-sm">
+		<center>	
+			<div class="box-element">
+
+				<div class="cart-row">
+					<div style="flex:1"><strong>Date</strong></div>
+					<div style="flex:1"><strong>Added</strong></div>
+					<div style="flex:1"><strong>Deleted</strong></div>
+				</div>
+				{% for coin in coins %}
+				<div class="cart-row">
+					<div style="flex:1">{{coin.date_added|date:"SHORT_DATE_FORMAT"}}</div>
+					<div style="flex:1">{{coin.added}}</div>
+					<div style="flex:1">{{coin.deleted}}</div>
+				</div>
+				{% endfor %}
+			</div>
+		</center>
+		</div>
+	</div>
+</center>
+
+<script>
+	function removeCoin(){
+		var url = "/coinRemover/"
+		console.log(form.value.value)
+		
+		value = form.value.value
+		count = form.count.value
+		if (value != "" && count != ""){
+			fetch(url, {
+					method:'POST',
+					headers:{
+						'Content-Type':'application/json',
+						'X-CSRFToken':'{{ csrf_token }}',
+					},
+					body:JSON.stringify({'value': parseInt(form.value.value), 'count':parseInt(form.count.value)}),
+				})
+				.then((response) => response.json())
+				.then((data) =>{
+					console.log('Cleared:',data);
+					alert('coin Removed');		
+					location.reload()
+				})
+		}
+		else{
+			alert("Provide Coin and Count !")
+		}
+	}
+</script>
+{% endblock content %}
