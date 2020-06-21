@@ -20,7 +20,7 @@
 
 	<nav class="navbar navbar-dark bg-dark">
 		<a href="{% url 'index' %}" class="navbar-brand">
-			<img id="cart-icon" src="{% static 'images/home.png' %}"/>
+			<img id="cart-icon" src="{% static 'images/nav/home.png' %}"/>
 		</a>
 		<span class="user_display">
 			<svg class="bi bi-person-circle" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -32,16 +32,16 @@
 		</span>
 		<div class="form-inline my-2 my-lg-0">
 			<a href="#" onclick="javascript: openFullscreen();">
-				<img id="cart-icon" src="{% static 'images/fs_open.png' %}">
+				<img id="cart-icon" src="{% static 'images/nav/fs_open.png' %}">
 			</a>
 			<a href="#" onclick="javascript: closeFullscreen();">
-				<img id="cart-icon" src="{% static 'images/fs_close.png' %}">
+				<img id="cart-icon" src="{% static 'images/nav/fs_close.png' %}">
 			</a>
 			<a href="{% url 'home' %}">
-				<img id="cart-icon" src="{% static 'images/controls.png' %}"/>
+				<img id="cart-icon" src="{% static 'images/nav/controls.png' %}"/>
 			</a>
 			<a href="{% url 'signout' %}">
-				<img id="cart-icon" src="{% static 'images/sign-out.png' %}">
+				<img id="cart-icon" src="{% static 'images/nav/sign-out.png' %}">
 			</a>
 		</div>
 	</nav>

@@ -36,6 +36,9 @@ class Order(models.Model):
     complete=models.BooleanField(default=False)
     transaction_id=models.CharField(max_length=100, null=True)
     
+    amount=models.PositiveIntegerField(null=True)
+    items=models.PositiveIntegerField(null=True)
+    
     def __str__(self):
         return str(self.id)
     

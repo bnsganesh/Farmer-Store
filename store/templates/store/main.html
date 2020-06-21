@@ -61,16 +61,16 @@
 
 	<nav class="navbar navbar-dark bg-dark">
 		<a href="{% url 'index' %}" class="navbar-brand">
-			<img id="cart-icon" src="{% static 'images/home.png' %}">
+			<img id="cart-icon" src="{% static 'images/nav/home.png' %}">
 		</a>
 		
 		<div class="form-inline my-2 my-lg-0">
 			
 			<a href="{% url 'store' %}">
-				<img id="cart-icon" src="{% static 'images/store.png' %}"/>
+				<img id="cart-icon" src="{% static 'images/nav/store.png' %}"/>
 			</a>
 			<a href="{% url 'cart' %}">
-				<img id="cart-icon" src="{% static 'images/cart.png' %}">
+				<img id="cart-icon" src="{% static 'images/nav/cart.png' %}">
 			</a>
 			<p id="cart-total">{{cartItems}}</p>
 		</div>

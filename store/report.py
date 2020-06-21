@@ -26,7 +26,7 @@ def report(request):
     writer.writerow(['Date','Transaction ID','Custemor','Items','Amount'])
     
     for order in orders:
-        writer.writerow([order.date_ordered,order.transaction_id,order.custemor.name,order.get_cart_items,order.get_cart_total])
+        writer.writerow([order.date_ordered,order.transaction_id,order.custemor.name,order.items,order.amount])
     
     global context
     context={'orders':orders, 'myFilter':myFilter}

@@ -21,13 +21,28 @@
 				</form>
 			</div>
 			<br>
-			<div class="box-element hidden" id="payment-info">
-				<small>Payment Options</small>
-				<!-- Set up a container element for the button -->
-				<div id="paypal-button-container"></div>
-				<!-- <button id="make-payment">Make payment</button> -->
-			</div>
 			
+			<center>
+			<div class="box-element hidden" id="payment-info">
+				</br>
+				<form action="javascript:submitFormData();">
+					
+					<script    
+						src="https://checkout.razorpay.com/v1/checkout.js"    class="stripe-button"
+						data-key="rzp_test_mArzke49DCZa9j" // Enter the Test API Key ID generated from Dashboard → Settings → API Keys    
+						data-amount="{{total}}" // Amount is in currency subunits. Hence, 29935 refers to 29935 paise or ₹299.35.    
+						data-currency="INR"//You can accept international payments by changing the currency code. Contact our Support Team to enable International for your account   				
+						 
+						data-buttontext="Pay with Razorpay"    
+						data-name="Store FF"
+						data-theme.color="#F37254">
+					</script>
+					<input id="form-button" class="btn btn-success btn-block" type="hidden" custom="Hidden Element" name="hidden">
+					 
+				</form>
+				</br>
+			</div>
+			</center>
 		</div>
 		<div class="col-lg-6">
 			<div class="box-element">
@@ -51,52 +66,13 @@
 		
 		
 	</div>
-	 <!-- Include the PayPal JavaScript SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AaW1RU1CwcIitLCEm8CQNi8fG0kQAwVNamapNoiD5dh58aLslFGdgO6HEyfkqU2L6HU2JaZ17BQSZ_9S&currency=USD"></script>
-	<script>
-	
-		var total = '{{order.get_cart_total}}'
-		
-        // Render the PayPal button into #paypal-button-container
-        paypal.Buttons({
-			
-			// Styles
-			style: {
-                color:  'blue',
-                shape:  'pill',
-                label:  'pay',
-                height: 40
-            },
-			
-            // Set up the transaction
-            createOrder: function(data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: parseFloat(total).toFixed(2)
-                        }
-                    }]
-                });
-            },
-
-            // Finalize the transaction
-            onApprove: function(data, actions) {
-                return actions.order.capture().then(function(details) {
-                    submitFormData()
-					/* Show a success message to the buyer
-                    alert('Transaction completed by ' + details.payer.name.given_name + '!');	*/
-                });
-            }
-
-
-        }).render('#paypal-button-container');
-    </script>
-	
 	
 	<script type="text/javascript">
+	
 		var total = '{{order.get_cart_total}}'
 		
 		var form = document.getElementById('form')
+		
 		form.addEventListener('submit', function(e){
 			e.preventDefault()
 			console.log('Form Submitted...')
@@ -105,7 +81,9 @@
 		})
 		
 		function submitFormData(){
-			console.log('Payment Button clicked...')
+		
+			document.getElementById('payment-info').innerHTML='<img src="{% static 'images/store/done.gif' %}" height=50% width=50%>'
+			console.log('Payment Button Done...')
 			
 			var userFormData = {
 				'name': null,
@@ -135,12 +113,6 @@
 				window.location.href = "{% url 'store' %}"
 			})
 		}
-		
-		/*
-		document.getElementById('make-payment').addEventListener('click', function(e){
-			submitFormData()
-		})
-		*/
 		
 	</script>
 {% endblock content %}

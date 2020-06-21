@@ -42,7 +42,9 @@ def checkout(request):
     order = data['order']
     items = data['items']
     
-    context={'items':items, 'order':order, 'cartItems':cartItems}
+    total = int((float("{:.2f}".format(order['get_cart_total'])))*100)
+
+    context={'items':items, 'order':order, 'cartItems':cartItems, 'total':total}
     return render(request,'store/checkout.html',context)    
     
 def updateItem(request):
@@ -65,12 +67,18 @@ def updateItem(request):
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
-    custemor, order = guestOrder(request, data)
+    custemor, order, items = guestOrder(request, data)
     
     total = float(data['form']['total'])
     order.transaction_id = transaction_id
     if total == float(order.get_cart_total):
         order.complete = True
+        order.amount = order.get_cart_total
+        order.items = order.get_cart_items
+        for item in items:
+            product = Product.objects.get(id=item['product']['id'])
+            product.stock -= item['quantity']
+            product.save()
     order.save()            
     return JsonResponse('Payment submitted', safe=False)
     
@@ -111,3 +119,6 @@ def add_item(request):
         form = ProductForm()
     products = Product.objects.all().order_by('slot')
     return render(request,'controls/add_item.html', {'form':form,'products':products})
+    
+def adds(request):
+    return render(request, 'adds.html')

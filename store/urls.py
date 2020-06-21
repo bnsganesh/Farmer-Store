@@ -35,6 +35,8 @@ urlpatterns = [
     
     path('coin_dispenser/',coin_dispenser.coin_dispenser, name="coin_dispenser"),
     path('coinRemover/',coin_dispenser.coinRemover, name="coinRemover"),
+    
+    path('adds/',views.adds,name="adds"),
 ]
 
 urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

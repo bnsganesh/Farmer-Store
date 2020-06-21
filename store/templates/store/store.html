@@ -5,21 +5,19 @@
 
 	<div class="row">
 		{% for product in products %}
+			{% if product.stock > 0 %}
 			<div class="col-lg-4">
 				<img class="thumbnail" src="{{product.imageURL}}">
 				<div class="box-element product">
-					<h6><strong>{{product.name}}</strong></h6>
+					<h6><strong>{{product.name}}</strong><span class="badge badge-secondary" style="float: right">{{product.stock}}</span></hr>
+					
 					<hr>
 					
-					
-					<!--
-					<button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-					<a class="btn btn-outline-success" href="#">View</a>	-->
-					
 					<h4 style="display: inline-block;"><strong>Rs. {{product.price|floatformat:2}}</strong></h4>
-					<img src="{% static 'images/add_cart.png' %}" style="float: right" id="cart-icon" data-action="add" data-product="{{product.id}}" class="update-cart"/>
+					<img src="{% static 'images/store/add_cart.png' %}" style="float: right" id="cart-icon" data-action="add" data-product="{{product.id}}" data-stock="{{product.stock}}" class="update-cart"/>
 				</div>
 			</div>
+			{% endif %}
 		{% endfor %}
 	</div>
 	

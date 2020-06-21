@@ -24,43 +24,17 @@
   min-width: 100%; 
   min-height: 100%;
 }
-
-.content {
-  position: fixed;
-  bottom: 0;
-  top: 0;
-  background: rgba(0, 0, 0, 0.5);
-  color: #f1f1f1;
-  width: 100%;
-  padding: 20px;
-}
-
 </style>
 </head>
 <body>
 
 	<video autoplay muted loop id="IndexVideo">
-	  <source src="{% static 'videos/index_bg.mp4' %}" type="video/mp4">
+	  <source src="{% static 'videos/adds_bg.mp4' %}" type="video/mp4">
 	</video>
+		<center><img src="{% static 'images/adds/add.png' %}" height=70 style="position: fixed; bottom: 0px;" /></center>
+	<center>Advertisement</center>
 
-<div class="content">
-	<nav class="navbar">
-		<a href="{% url 'store' %}" class="navbar-brand">
-			<img id="cart-icon" src="{% static 'images/nav/store.png' %}"/>
-		</a>
-		
-		<div class="form-inline my-2 my-lg-0">
-			<a href="{% url 'signin' %}">
-				<img id="cart-icon" src="{% static 'images/nav/sign-in.png' %}"/>
-			</a>
-		</div>
-	</nav>
-	<div class="container"> 	
-		<a href="{% url 'store' %}">
-			<img src="{% static 'images/nav/shop-now.png' %}" height=70 style="position: fixed; bottom: 0px; right: 0px;" />
-		</a>
-	</div>
-</div>
+</body>
 <script>
 	var timeoutID;
 	 
@@ -89,15 +63,14 @@
 	}
 	 
 	function goInactive() {
-		// Go To Adds Page
-		window.location.href = "{% url 'adds' %}"
+		// Do Nothing Stay and Displat Adds
+		
 	}
 	 
 	function goActive() {
-		// Do Nothing
-			 
+		// Go To Index Page
+		window.location.href = "{% url 'index' %}"	 
 		startTimer();
 	}
 </script>
-</body>
 </html>

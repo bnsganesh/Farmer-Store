@@ -60,8 +60,8 @@
 					<div style="flex:1"><p>{{order.date_ordered|date:"SHORT_DATE_FORMAT"}}</p></div>
 					<div style="flex:1"><p>{{order.transaction_id}}</p></div>
 					<div style="flex:1"><p>{{order.custemor.name}}</p></div>
-					<div style="flex:1"><p>&nbsp;&nbsp;&nbsp;{{order.get_cart_items}}</p></div>
-					<div style="flex:1"><p>Rs. {{order.get_cart_total}}</p></div>
+					<div style="flex:1"><p>&nbsp;&nbsp;&nbsp;{{order.items}}</p></div>
+					<div style="flex:1"><p>Rs. {{order.amount}}</p></div>
 					{% endif %}
 				</div>
 				{% endfor %}
@@ -86,27 +86,29 @@
 		
 		
 		function sendMail(){
-		console.log('Sending Mail...')
-		document.getElementById('mail').innerHTML='<img src="{% static 'images/report/sending_mail.gif' %}" height=50 width=50"/>'
-		
-		var url = '/email_report/'
-		
-		fetch(url, {
-				method:'POST',
-				headers:{
-					'Content-Type':'application/json',
-					'X-CSRFToken':'{{ csrf_token }}',
-				},
-				body:JSON.stringify()
-			})
-			.then((response) =>{
-				return response.json();
-			})
-			.then((data) =>{
-				document.getElementById('mail').innerHTML='<img src="{% static 'images/report/email.png' %}" height=50 width=50 onClick="sendMail()"/>'
-				alert("Mail Sent!");
-			})
+		if(confirm('Send Mail ?')){
+			console.log('Sending Mail...')
+			document.getElementById('mail').innerHTML='<img src="{% static 'images/report/sending_mail.gif' %}" height=50 width=50"/>'
 			
-		}	
+			var url = '/email_report/'
+			
+			fetch(url, {
+					method:'POST',
+					headers:{
+						'Content-Type':'application/json',
+						'X-CSRFToken':'{{ csrf_token }}',
+					},
+					body:JSON.stringify()
+				})
+				.then((response) =>{
+					return response.json();
+				})
+				.then((data) =>{
+					document.getElementById('mail').innerHTML='<img src="{% static 'images/report/email.png' %}" height=50 width=50 onClick="sendMail()"/>'
+					alert("Mail Sent!");
+				})
+				
+			}	
+		}
 	</script>
 {% endblock content %}

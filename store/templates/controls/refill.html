@@ -82,7 +82,7 @@
 				
 				<center>
 					<button type="button" id="clear" style="border-radius: 25px;" class="btn btn-outline-danger" onClick="clearTray()">&#10007;</button>
-					<button type="submit" id="update" style="border-radius: 25px;" class="btn btn-outline-success">&#10003;</button>
+					<button type="submit" id="update" style="border-radius: 25px;" class="btn btn-outline-success" onClick="return confirm('Update Stock ?')">&#10003;</button>
 					<div id="error">
 						{% for message in messages %}
 							<center>{{message}}</center>
@@ -148,22 +148,24 @@
 	}
 	
 	function clearTray(){
-		var url = "/clear/"
-		console.log('Slot:',parseInt(form.slot.value))
-			fetch(url, {
-				method:'POST',
-				headers:{
-					'Content-Type':'application/json',
-					'X-CSRFToken':'{{ csrf_token }}',
-				},
-				body:JSON.stringify({'slot': parseInt(form.slot.value)}),
-			})
-			.then((response) => response.json())
-			.then((data) =>{
-				console.log('Cleared:',data);
-				alert('Tray Cleared');	
-				window.location.href = "{% url 'refill' %}"
-			})
+		if(confirm('Clear Stock ?')){
+			var url = "/clear/"
+			console.log('Slot:',parseInt(form.slot.value))
+				fetch(url, {
+					method:'POST',
+					headers:{
+						'Content-Type':'application/json',
+						'X-CSRFToken':'{{ csrf_token }}',
+					},
+					body:JSON.stringify({'slot': parseInt(form.slot.value)}),
+				})
+				.then((response) => response.json())
+				.then((data) =>{
+					console.log('Cleared:',data);
+					alert('Stock Cleared');	
+					window.location.href = "{% url 'refill' %}"
+				})
+		}
 		
 	}
 	

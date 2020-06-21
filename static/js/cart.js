@@ -4,19 +4,20 @@ for (i=0; i< updateBtns.length; i++){
 	updateBtns[i].addEventListener('click', function(){
 		var productId = this.dataset.product
 		var action = this.dataset.action
-		console.log('productId:',productId,'action:',action)
+		var stock = this.dataset.stock
+		console.log('productId:',productId,'action:',action,'stock:',stock)
 		
 		console.log('User:',user)
 		if(user == 'AnonymousUser'){
-			addCookieItem(productId, action)
+			addCookieItem(productId, action, stock)
 		}
 		else{
-			updateUserOrder(productId, action)		
+			updateUserOrder(productId, action, stock)		
 		}
 	})
 }
 
-function addCookieItem(productId, action){
+function addCookieItem(productId, action, stock){
 	console.log('User is not authenticated!')
 
 	if(action == 'add'){
@@ -24,7 +25,12 @@ function addCookieItem(productId, action){
 			cart[productId] = {'quantity':1}
 		}
 		else{
-			cart[productId]['quantity'] += 1
+			if(stock>cart[productId]['quantity']){
+				cart[productId]['quantity'] += 1
+			}
+			else{
+				alert("Only "+stock+"-items available!")
+			}
 		}
 	}
 	
