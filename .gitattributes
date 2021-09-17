@@ -1,2 +1,2 @@
-* .python linguistic-detectable=true
-* .django linguistic-detectable=true
+*.python linguist-detectable=true
+*.django linguist-detectable=true
